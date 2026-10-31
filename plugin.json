@@ -1,0 +1,19 @@
+{
+  "id": "neobase.demarrage",
+  "name": "Démarrage",
+  "version": "1.0.0",
+  "author": "NDesumeur",
+  "description": "Les programmes lancés avec Windows, que tu actives ou désactives comme dans le gestionnaire des tâches.",
+  "icon": "icon.png",
+  "entry": "index.js",
+  "view": "demarrage",
+  "neobase": ">=4.0.0",
+  "type": "app",
+  "category": "Système",
+  "mobile": false,
+  "system": false,
+  "dependencies": {},
+  "permissions": [
+    "full"
+  ]
+}
