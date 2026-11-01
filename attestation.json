@@ -1,9 +1,0 @@
-{
-  "pluginId": "neobase.demarrage",
-  "repo": "NDesumeur/neobase-plugin-demarrage",
-  "version": "1.0.1",
-  "sha256": "d2d6fdda0ae31b03ef2fb0bf31cfeb76a7bb8943a954f8a8b2f1ac6c4a9de419",
-  "approvedAt": "2026-10-31T17:51:20.948Z",
-  "neobase": ">=4.0.0",
-  "signature": "ULSmtauI2rGcOGCaasQROY/JzCXNExgomJNgOCwuxv+qNWPiMQlRcsTIxD/+QDUtmAmcW5OQlEysldoXLBcTCA=="
-}
