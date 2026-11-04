@@ -1,6 +1,6 @@
 // Démarrage : ton appli d'origine (HTML et code inchangés), livrée en plugin.
 // Ses données sont dans le dossier du plugin, que NeoBase sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoBase.
-// Elle demande l'accès complet pour utiliser les outils d'interface de NeoBase. NeoBase ne l'ouvre que si elle est signée.
+// Elle tourne dans le bac à sable de NeoBase, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
 const HTML = "<div class=\"appWrap\">\n      <div class=\"agHead\"><span class=\"label\">Démarrage</span><span class=\"hint\" id=\"suInfo\"></span><div class=\"agNav\"><button class=\"btn px\" id=\"suRefresh\">ACTUALISER</button></div></div>\n      <div class=\"hint\">Les programmes qui se lancent tout seuls quand tu allumes le PC. En désactiver un ne le désinstalle pas : il ne démarre simplement plus tout seul, comme dans le Gestionnaire des tâches. Le changement compte au prochain démarrage.</div>\n      <div id=\"suList\"></div>\n    </div>";
 /*CSS-MOVED*/ const CSS = `#suList{display:flex;flex-direction:column;gap:10px}
 .sysCard.suRow{flex-direction:row;align-items:center;gap:14px;padding:12px 16px}
@@ -21,7 +21,6 @@ export default async function (ctx) {
   const $ = id => id === "startupApp" ? view : (view.querySelector('#' + id) || document.getElementById(id));  // les identifiants de ta vue d'abord, puis ceux de la page (fenêtres, menus)
   const doc = async n => { try { return await folder.read(n); } catch { return null; } };
   const __icon = () => ctx.icon;  // l'icône de ce plugin
-  const TOKEN = ctx.token;  // le jeton du serveur local de NeoBase
   // ---- ton code d'origine ----
 /* ---------- Démarrage app: programs launched with Windows, switched on / off like in the Task Manager ---------- */
 async function suOpen() {
@@ -30,7 +29,7 @@ async function suOpen() {
   $('suInfo').textContent = list.length + ' programme' + (list.length > 1 ? 's' : '') + ' · ' + on + ' activé' + (on > 1 ? 's' : '');
   $('suList').replaceChildren(...list.sort((a, b) => b.editable - a.editable || a.name.localeCompare(b.name, 'fr')).map(it => {
     const r = el('div', 'sysCard px suRow' + (it.enabled ? '' : ' off')), ic = el('img'), n = el('div', 'tn'), sw = el('label', 'suSwitch'), cb = el('input');
-    ic.src = it.exe ? '/api/icon?t=' + TOKEN + '&p=' + encodeURIComponent(it.exe) : ''; ic.onerror = () => ic.style.visibility = 'hidden';
+    ic.onerror = () => ic.style.visibility = 'hidden'; if (it.exe) neo.exeIcon(it.exe).then(u => { ic.src = u; }, () => ic.onerror()); else ic.onerror();  // l'icône du programme, donnée par NeoBase
     n.append(it.name, el('small', '', it.label + ' · ' + it.command));
     cb.type = 'checkbox'; cb.checked = it.enabled; cb.disabled = !it.editable;
     cb.onchange = async () => {
