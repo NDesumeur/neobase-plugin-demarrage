@@ -1,6 +1,6 @@
 // Démarrage : ton appli d'origine (HTML et code inchangés), livrée en plugin.
-// Ses données sont dans le dossier du plugin, que NeoBase sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoBase.
-// Elle tourne dans le bac à sable de NeoBase, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
+// Ses données sont dans le dossier du plugin, que NeoDex sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoDex.
+// Elle tourne dans le bac à sable de NeoDex, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
 const HTML = "<div class=\"appWrap\">\n      <div class=\"agHead\"><span class=\"label\">Démarrage</span><span class=\"hint\" id=\"suInfo\"></span><div class=\"agNav\"><button class=\"btn px\" id=\"suRefresh\">ACTUALISER</button></div></div>\n      <div class=\"hint\">Les programmes qui se lancent tout seuls quand tu allumes le PC. En désactiver un ne le désinstalle pas : il ne démarre simplement plus tout seul, comme dans le Gestionnaire des tâches. Le changement compte au prochain démarrage.</div>\n      <div id=\"suList\"></div>\n    </div>";
 /*CSS-MOVED*/ const CSS = `#suList{display:flex;flex-direction:column;gap:10px}
 .sysCard.suRow{flex-direction:row;align-items:center;gap:14px;padding:12px 16px}
@@ -10,10 +10,10 @@ const HTML = "<div class=\"appWrap\">\n      <div class=\"agHead\"><span class=\
 .suRow small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .suSwitch{display:flex;align-items:center;gap:10px;font:8px var(--title);letter-spacing:1px;color:var(--lilac);cursor:var(--cp,pointer)}
 .suSwitch input{accent-color:var(--magenta);width:18px;height:18px}
-`;  // le style de ce plugin (il utilise les variables du thème de NeoBase)
+`;  // le style de ce plugin (il utilise les variables du thème de NeoDex)
 export default async function (ctx) {
   const view = ctx.view;
-  if (!ctx.host) { view.textContent = "Ce plugin doit être approuvé par NeoBase pour s'ouvrir."; return; }
+  if (!ctx.host) { view.textContent = "Ce plugin doit être approuvé par NeoDex pour s'ouvrir."; return; }
   const host = ctx.host, { el, toast, sfx, ask, newTab, pixIcon, PIX, WX } = host;
   const folder = ctx.folder, legacy = ctx.legacy || {};
   ctx.host.addStyle(CSS);
@@ -29,7 +29,7 @@ async function suOpen() {
   $('suInfo').textContent = list.length + ' programme' + (list.length > 1 ? 's' : '') + ' · ' + on + ' activé' + (on > 1 ? 's' : '');
   $('suList').replaceChildren(...list.sort((a, b) => b.editable - a.editable || a.name.localeCompare(b.name, 'fr')).map(it => {
     const r = el('div', 'sysCard px suRow' + (it.enabled ? '' : ' off')), ic = el('img'), n = el('div', 'tn'), sw = el('label', 'suSwitch'), cb = el('input');
-    ic.onerror = () => ic.style.visibility = 'hidden'; if (it.exe) neo.exeIcon(it.exe).then(u => { ic.src = u; }, () => ic.onerror()); else ic.onerror();  // l'icône du programme, donnée par NeoBase
+    ic.onerror = () => ic.style.visibility = 'hidden'; if (it.exe) neo.exeIcon(it.exe).then(u => { ic.src = u; }, () => ic.onerror()); else ic.onerror();  // l'icône du programme, donnée par NeoDex
     n.append(it.name, el('small', '', it.label + ' · ' + it.command));
     cb.type = 'checkbox'; cb.checked = it.enabled; cb.disabled = !it.editable;
     cb.onchange = async () => {
