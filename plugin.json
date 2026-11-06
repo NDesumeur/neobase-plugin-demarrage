@@ -1,7 +1,7 @@
 {
   "id": "neodex.demarrage",
   "name": "Démarrage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "NDesumeur",
   "description": "Les programmes lancés avec Windows, que tu actives ou désactives comme dans le gestionnaire des tâches.",
   "icon": "icon.png",
